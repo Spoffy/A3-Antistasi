@@ -57,7 +57,7 @@ while {true} do
 					_civ setPosATL _posCasa;
 					[_civ] spawn A3A_fnc_CIVinit;
 					_civs pushBack _civ;
-					if (_civ == leader _civ) then {_nul = [_civ, "ambientCiv", "SAFE", "SPAWNED","NOFOLLOW", "NOVEH2","NOSHARE","DoRelax"] execVM "scripts\UPSMON.sqf"};
+					if (_civ == leader _civ) then {_nul = [_civ, "ambientCiv", "CARELESS", "SPAWNED","NOFOLLOW", "NOVEH2","NOSHARE","DoRelax"] execVM "scripts\UPSMON.sqf"};
 					};
 				};
 			};
