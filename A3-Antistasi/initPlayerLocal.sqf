@@ -622,7 +622,9 @@ petros setIdentity "amiguete";
 petros setName "Petros";
 petros disableAI "MOVE";
 petros disableAI "AUTOTARGET";
-petros addAction ["Mission Request", {nul=CreateDialog "mission_menu";},nil,0,false,true,"","_this == theBoss"];
+call A3A_fnc_missionMenu;
+//missionmenu_missionRequest = petros addAction ["Mission Request", {call A3A_fnc_missionMenu},nil,0,false,true,"","_this == theBoss"];
+//missionmenu_missionRequest = petros addAction ["Mission Request", {nul=CreateDialog "mission_menu";},nil,0,false,true,"","_this == theBoss"];
 
 disableSerialization;
 //1 cutRsc ["H8erHUD","PLAIN",0,false];

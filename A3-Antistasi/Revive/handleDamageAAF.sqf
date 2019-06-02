@@ -1,6 +1,7 @@
 private ["_unit","_part","_dam","_injurer","_grupo"];
 _dam = _this select 2;
 _injurer = _this select 3;
+
 if (side _injurer == buenos) then
 	{
 	_unit = _this select 0;
@@ -20,10 +21,8 @@ if (side _injurer == buenos) then
 			{
 			if (!(_unit getVariable ["INCAPACITATED",false])) then
 				{
-				_unit setVariable ["INCAPACITATED",true,true];
-				_unit setUnconscious true;
+        [_unit,_injurer] call A3A_fnc_makeUnconsciousAAF;
 				_dam = 0.9;
-				[_unit,_injurer] spawn A3A_fnc_inconscienteAAF;
 				}
 			else
 				{
@@ -68,15 +67,13 @@ if (side _injurer == buenos) then
 						{
 						if !(_unit getVariable ["INCAPACITATED",false]) then
 							{
-							_unit setVariable ["INCAPACITATED",true,true];
-							_unit setUnconscious true;
+              if (!isNull _injurer) then {[_unit,_injurer] call A3A_fnc_makeUnconsciousAAF} else {[_unit,objNull] call A3A_fnc_makeUnconsciousAAF};
+              if (isPlayer _unit) then {_unit allowDamage false};
 							if (vehicle _unit != _unit) then
 								{
 								//_unit action ["getOut", vehicle _unit];
 								moveOut _unit;
 								};
-							if (isPlayer _unit) then {_unit allowDamage false};
-							if (!isNull _injurer) then {[_unit,_injurer] spawn A3A_fnc_inconscienteAAF} else {[_unit,objNull] spawn A3A_fnc_inconscienteAAF};
 							};
 						};
 					}
@@ -86,14 +83,13 @@ if (side _injurer == buenos) then
 						{
 						if !(_unit getVariable ["INCAPACITATED",false]) then
 							{
-							_unit setVariable ["INCAPACITATED",true,true];
-							_unit setUnconscious true;
+              if (!isNull _injurer) then {[_unit,_injurer] call A3A_fnc_makeUnconsciousAAF} else {[_unit,objNull] call A3A_fnc_makeUnconsciousAAF};
+              if (isPlayer _unit) then {_unit allowDamage false};
 							if (vehicle _unit != _unit) then
 								{
+								//_unit action ["getOut", vehicle _unit];
 								moveOut _unit;
 								};
-							if (isPlayer _unit) then {_unit allowDamage false};
-							if (!isNull _injurer) then {[_unit,_injurer] spawn A3A_fnc_inconscienteAAF} else {[_unit,objNull] spawn A3A_fnc_inconscienteAAF};
 							};
 						};
 					};

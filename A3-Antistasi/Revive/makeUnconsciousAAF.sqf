@@ -1,13 +1,21 @@
+params ["_unit", "_injurer"];
+
+_unit setVariable ["INCAPACITATED",true,true];
+_unit setUnconscious true;
+_unit setVariable ["attackerThatCausedUnconscious", _injurer, true];
+
+[_unit, _injurer] spawn {
+
 private ["_unit","_grupo","_grupos","_isLeader","_dummyGroup","_bleedOut","_suicide","_saveVolume","_ayuda","_ayudado","_texto","_isPlayer","_camTarget","_saveVolumeVoice"];
+
 _unit = _this select 0;
 _injurer = _this select 1;
-//if (_unit getVariable "inconsciente") exitWith {};
-//if (damage _unit < 0.9) exitWith {};
-//if (!local _unit) exitWith {};
-//_unit setVariable ["inconsciente",true,true];
+
 _bleedOut = if (surfaceIsWater (position _unit)) then {time + 60} else {time + 300};//300
+_bleedOut = time + 15;
 _jugadores = false;
 _lado = side (group _unit);
+
 if ((side _injurer == buenos) and (_lado == malos)) then
 	{
 	_marcador = _unit getVariable ["marcador",""];
@@ -71,6 +79,7 @@ if (time >= _bleedOut) exitWith
 				};
 			};
 		};
+  _unit setVariable ["bledOut", true, true];
 	_unit setDamage 1;
 	};
 
@@ -112,3 +121,4 @@ if (alive _unit) then
 			};
 		};
 	*/};
+};

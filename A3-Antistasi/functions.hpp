@@ -169,9 +169,15 @@ class A3A
         class ataqueHQ {file="Missions\ataqueHQ.sqf";};
         class borrarTask {file="Missions\borrarTask.sqf";};
         class missionRequest {file="Missions\missionrequest.sqf";};
+        class missionMenu {file="Missions\missionmenu.sqf";};
         class missionRequestAUTO {file="Missions\missionrequestAUTO.sqf";};
         class taskUpdate {file="Missions\taskUpdate.sqf";};
         class underAttack {file="Missions\underAttack.sqf";};
+        
+        class isValidLocationForLogisticsMission {file="Missions\Logistics\isValidLocationForLogisticsMission.sqf";};
+        class possibleLocationsForLogisticsMissions {file="Missions\Logistics\possibleLocationsForLogisticsMissions.sqf";};
+        class createLogisticsMission {file="Missions\Logistics\createLogisticsMission.sqf";};
+
 	}
 
 	class Municion
@@ -232,7 +238,7 @@ class A3A
         class handleDamage {file="Revive\handleDamage.sqf";};
         class handleDamageAAF {file="Revive\handleDamageAAF.sqf";};
         class inconsciente {file="Revive\inconsciente.sqf";};
-        class inconscienteAAF {file="Revive\inconscienteAAF.sqf";};
+        class makeUnconsciousAAF {file="Revive\makeUnconsciousAAF.sqf";};
         class initRevive {file="Revive\initRevive.sqf";};
         class isMedic {file="Revive\isMedic.sqf";};
         class respawn {file="Revive\respawn.sqf";};

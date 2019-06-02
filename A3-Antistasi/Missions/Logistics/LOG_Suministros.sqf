@@ -56,19 +56,20 @@ else
 	_cuenta = 120*_bonus;//120
 	[[_posicion,malos,"",false],"A3A_fnc_patrolCA"] remoteExec ["A3A_fnc_scheduler",2];
 	["TaskFailed", ["", format ["%2 deploying supplies in %1",_nombredest,nameBuenos]]] remoteExec ["BIS_fnc_showNotification",malos];
-	{_amigo = _x;
-	if (captive _amigo) then
-		{
-		[_amigo,false] remoteExec ["setCaptive",0,_amigo];
-		_amigo setCaptive false;
-		};
 	{
-	if ((side _x == malos) and (_x distance _posicion < distanciaSPWN)) then
-		{
-		if (_x distance _posicion < 300) then {_x doMove _posicion} else {_x reveal [_amigo,4]};
-		};
-	if ((side _x == civilian) and (_x distance _posicion < 300) and (vehicle _x == _x)) then {_x doMove position _camion};
-	} forEach allUnits;
+    _amigo = _x;
+    if (captive _amigo) then
+      {
+      [_amigo,false] remoteExec ["setCaptive",0,_amigo];
+      _amigo setCaptive false;
+      };
+    {
+      if ((side _x == malos) and (_x distance _posicion < distanciaSPWN)) then
+        {
+        if (_x distance _posicion < 300) then {_x doMove _posicion} else {_x reveal [_amigo,4]};
+        };
+      if ((side _x == civilian) and (_x distance _posicion < 300) and (vehicle _x == _x)) then {_x doMove position _camion};
+    } forEach allUnits;
 	} forEach ([300,0,_camion,buenos] call A3A_fnc_distanceUnits);
 	while {(_cuenta > 0)/* or (_camion distance _posicion < 40)*/ and (dateToNumber date < _fechalimnum) and !(isNull _camion)} do
 		{
@@ -112,7 +113,7 @@ _emptybox = "Land_PaperBox_01_open_empty_F" createVehicle _ecpos;
 //sleep (600 + random 1200);
 
 //_nul = [_tsk,true] call BIS_fnc_deleteTask;
-_nul = [1200,"LOG"] spawn A3A_fnc_borrarTask;
+_nul = [20,"LOG"] spawn A3A_fnc_borrarTask;
 waitUntil {sleep 1; (not([distanciaSPWN,1,_camion,buenos] call A3A_fnc_distanceUnits)) or (_camion distance (getMarkerPos respawnBuenos) < 60)};
 
 deleteVehicle _emptybox;

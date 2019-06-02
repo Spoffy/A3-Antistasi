@@ -9,7 +9,17 @@ _lado = side _unit;
 //_unit setVariable ["lado",_lado];
 _unit addEventHandler ["HandleDamage",A3A_fnc_handleDamageAAF];
 
-_unit addEventHandler ["killed",A3A_fnc_AAFKilledEH];
+_unit addEventHandler ["killed", {
+  params ["_unit", "_killer", "_instigator", "_useEffects"];
+  if (_unit getVariable ["bledOut",false]) then 
+  {
+    _killer = _unit getVariable ["attackerThatCausedUnconscious", _killer];
+    diag_log format ["%1 bled out due to %2", _unit, _killer];
+  };
+  diag_log format ["%1 died due to %2", _unit, _killer];
+  [_unit, _killer, _instigator, _useEffects] call A3A_fnc_AAFKilledEH;
+}];
+
 if (count _this > 1) then
 	{
 	_marcador = _this select 1;

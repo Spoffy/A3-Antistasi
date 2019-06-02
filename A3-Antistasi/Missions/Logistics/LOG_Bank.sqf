@@ -141,7 +141,7 @@ if (!alive _camion) then
 
 deleteVehicle _camion;
 
-_nul = [1200,"LOG"] spawn A3A_fnc_borrarTask;
+_nul = [20,"LOG"] spawn A3A_fnc_borrarTask;
 
 waitUntil {sleep 1; !([distanciaSPWN,1,_posicion,buenos] call A3A_fnc_distanceUnits)};
 

@@ -8,9 +8,9 @@ WPCreate = if (worldName == "Tanoa") then {compile preprocessFileLineNumbers "CR
 CONVOY = compile preprocessFileLineNumbers "Missions\CONVOY.sqf";
 RES_Prisioneros = compile preprocessFileLineNumbers "Missions\RES_Prisioneros.sqf";
 RES_Refugiados = compile preprocessFileLineNumbers "Missions\RES_Refugiados.sqf";
-LOG_Bank = compile preprocessFileLineNumbers "Missions\LOG_Bank.sqf";
-LOG_Suministros = compile preprocessFileLineNumbers "Missions\LOG_Suministros.sqf";
-LOG_Ammo = compile preprocessFileLineNumbers "Missions\LOG_Ammo.sqf";
+LOG_Bank = compile preprocessFileLineNumbers "Missions\Logistics\LOG_Bank.sqf";
+LOG_Suministros = compile preprocessFileLineNumbers "Missions\Logistics\LOG_Suministros.sqf";
+LOG_Ammo = compile preprocessFileLineNumbers "Missions\Logistics\LOG_Ammo.sqf";
 DES_Vehicle = compile preprocessFileLineNumbers "Missions\DES_Vehicle.sqf";
 DES_Heli = compile preprocessFileLineNumbers "Missions\DES_Heli.sqf";
 DES_Antena = compile preprocessFileLineNumbers "Missions\DES_Antena.sqf";

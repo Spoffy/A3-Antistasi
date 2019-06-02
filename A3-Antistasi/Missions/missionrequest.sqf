@@ -1,6 +1,6 @@
 if (!isServer) exitWith {};
 
-private ["_tipo","_posbase","_posibles","_sitios","_exists","_sitio","_pos","_ciudad"];
+private ["_tipo","_posbase","_posibles","_sitios","_exists","_sitio","_pos","_ciudad", "_target"];
 
 _tipo = _this select 0;
 
@@ -120,66 +120,21 @@ if (_tipo == "DES") then
 		};
 	};
 if (_tipo == "LOG") then
-	{
-	_sitios = puestos + ciudades - destroyedCities;
-	_sitios = _sitios select {lados getVariable [_x,sideUnknown] != buenos};
-	if (random 100 < 20) then {_sitios = _sitios + bancos};
-	if (count _sitios > 0) then
-		{
-		for "_i" from 0 to ((count _sitios) - 1) do
-			{
-			_sitio = _sitios select _i;
-			if (_sitio in marcadores) then
-				{
-				_pos = getMarkerPos _sitio;
-				}
-			else
-				{
-				_pos = getPos _sitio;
-				};
-			if (_pos distance _posbase < distanciaMiss) then
-				{
-				if (_sitio in ciudades) then
-					{
-					_datos = server getVariable _sitio;
-					_prestigeOPFOR = _datos select 2;
-					_prestigeBLUFOR = _datos select 3;
-					if (_prestigeOPFOR + _prestigeBLUFOR < 90) then
-						{
-						_posibles pushBack _sitio;
-						};
-					}
-				else
-					{
-					if ([_pos,_posbase] call A3A_fnc_isTheSameIsland) then {_posibles pushBack _sitio};
-					};
-				};
-			if (_sitio in bancos) then
-				{
-				_ciudad = [ciudades, _pos] call BIS_fnc_nearestPosition;
-				if (lados getVariable [_ciudad,sideUnknown] == buenos) then {_posibles = _posibles - [_sitio]};
-				};
-			};
-		};
-	if (count _posibles == 0) then
-		{
-		if (!_silencio) then
-			{
-			[petros,"globalChat","I have no logistics missions for you. Move our HQ closer to the enemy or finish some other logistics missions in order to have better intel"] remoteExec ["A3A_fnc_commsMP",theBoss];
-			[petros,"hint","Logistics Missions require Outposts, Cities or Banks closer than 4Km from your HQ."] remoteExec ["A3A_fnc_commsMP",theBoss];
-			};
-		}
-	else
-		{
-		_sitio = _posibles call BIS_fnc_selectRandom;
-		if (_sitio in ciudades) then {[[_sitio],"LOG_Suministros"] remoteExec ["A3A_fnc_scheduler",2]};
-		if (_sitio in puestos) then {[[_sitio],"LOG_Ammo"] remoteExec ["A3A_fnc_scheduler",2]};
-		if (_sitio in bancos) then {[[_sitio],"LOG_Bank"] remoteExec ["A3A_fnc_scheduler",2]};
-		};
-	};
+{
+  private _type = selectRandom ["AMMO", "SUPPLY", "BANK"];
+  private _missionCreateSuccess = [_type] call A3A_fnc_createLogisticsMission;
+  
+	if (!_missionCreateSuccess and !_silencio) then
+  {
+    [petros,"globalChat","I have no logistics missions for you. Move our HQ closer to the enemy or finish some other logistics missions in order to have better intel"] remoteExec ["A3A_fnc_commsMP",theBoss];
+    [petros,"hint","Logistics Missions require Outposts, Cities or Banks closer than 4Km from your HQ."] remoteExec ["A3A_fnc_commsMP",theBoss];
+  };
+};
 if (_tipo == "RES") then
 	{
-	_sitios = aeropuertos + puestos + ciudades;
+  //Limit Rescue missions to cities
+	//_sitios = aeropuertos + puestos + ciudades;
+  _sitios = ciudades;
 	_sitios = _sitios select {lados getVariable [_x,sideUnknown] != buenos};
 	if (count _sitios > 0) then
 		{
