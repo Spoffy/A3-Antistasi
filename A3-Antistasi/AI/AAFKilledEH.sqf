@@ -21,6 +21,8 @@ if (side (group _killer) == buenos) then
 	{
 	if (isPlayer _killer) then
 		{
+    _profit = 20 / ({side _x == buenos} count (call BIS_fnc_listPlayers));
+    _nul = [0,20] remoteExec ["A3A_fnc_resourcesFIA",2];
 		[1,_killer] call A3A_fnc_playerScoreAdd;
 		if (captive _killer) then
 			{

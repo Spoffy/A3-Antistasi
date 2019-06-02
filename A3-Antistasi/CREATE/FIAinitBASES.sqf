@@ -204,11 +204,9 @@ _EHkilledIdx = _unit addEventHandler ["killed", {
 	[_muerto] remoteExec ["A3A_fnc_postmortem",2];
 	if (isPlayer _killer) then
 		{
-		if (!isMultiPlayer) then
-			{
-			_nul = [0,20] remoteExec ["A3A_fnc_resourcesFIA",2];
-			_killer addRating 1000;
-			};
+      _profit = 20 / ({side _x == buenos} count (call BIS_fnc_listPlayers));
+      _nul = [0,20] remoteExec ["A3A_fnc_resourcesFIA",2];
+      _killer addRating 1000;
 		};
 	if (side _killer == malos) then
 		{
