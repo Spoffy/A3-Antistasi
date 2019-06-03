@@ -12,7 +12,6 @@ _unit = _this select 0;
 _injurer = _this select 1;
 
 _bleedOut = if (surfaceIsWater (position _unit)) then {time + 60} else {time + 300};//300
-_bleedOut = time + 15;
 _jugadores = false;
 _lado = side (group _unit);
 
