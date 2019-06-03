@@ -205,7 +205,7 @@ _EHkilledIdx = _unit addEventHandler ["killed", {
 	if (isPlayer _killer) then
 		{
       _profit = 20 / ({side _x == buenos} count (call BIS_fnc_listPlayers));
-      _nul = [0,20] remoteExec ["A3A_fnc_resourcesFIA",2];
+      _nul = [0,_profit] remoteExec ["A3A_fnc_resourcesFIA",2];
       _killer addRating 1000;
 		};
 	if (side _killer == malos) then
