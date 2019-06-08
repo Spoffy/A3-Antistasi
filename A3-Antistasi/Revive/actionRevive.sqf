@@ -49,11 +49,13 @@ if !(_curado getVariable ["INCAPACITATED",false]) exitWith
 	_healed
 	};
 if (surfaceIsWater (position _curado)) exitWith {if (_player) then {hint format ["You cannot heal %1 in the water",name _curado]};_healed};
+
 if (_player) then
 	{
 	_curado setVariable ["ayudado",_curandero,true];
 	};
 _curandero setVariable ["ayudando",true];
+
 if (not("FirstAidKit" in (items _curandero))) then
 	{
 	_curandero addItem "FirstAidKit";
@@ -77,11 +79,11 @@ _timer = if ([_curado] call A3A_fnc_fatalWound) then
 
 
 _curandero setVariable ["timeToHeal",_timer];
-_curandero playMoveNow selectRandom medicAnims;
-_curandero setVariable ["animsDone",false];
 _curandero setVariable ["curado",_curado];
+
 _curandero setVariable ["success",false];
 _curandero setVariable ["cancelRevive",false];
+
 if (!_player) then
 	{
 	{_curandero disableAI _x} forEach ["ANIM","AUTOTARGET","FSM","MOVE","TARGET"];
@@ -90,6 +92,121 @@ else
 	{
 	_accion = _curandero addAction ["Cancel Revive", {(_this select 1) setVariable ["cancelRevive",true]},nil,6,true,true,"","(_this getVariable [""ayudando"",false]) and (isPlayer _this)"];
 	};
+
+private _oldAnimationState =  animationState _curandero;
+
+private _reviveAnimLoopHandler = _curandero addEventHandler ["AnimDone", 
+  {
+    private _healer = _this select 0;
+    if ([_healer] call A3A_fnc_canFight) then
+    {
+      _healer playMoveNow selectRandom medicAnims;
+    };
+  }];
+  
+_curandero playMoveNow selectRandom medicAnims;
+  
+waitUntil {
+  sleep 0.5; 
+  //Enough time has passed
+  time > (_curandero getVariable ["timeToHeal",time]) 
+    //We want to cancel the revive
+    or (_curandero getVariable ["cancelRevive",false]) 
+    //Target is dead
+    or !(alive _curado) 
+    //Target is no longer incapacitated
+    or !(_curado getVariable ["INCAPACITATED",false]) 
+    //We're in a vehicle
+    or !(_curandero == vehicle _curandero)
+    //We've moved too far away
+    or (_curandero distance _curado > 3);
+};
+
+_curandero removeEventHandler ["AnimDone", _reviveAnimLoopHandler];
+_curandero switchMove _oldAnimationState;
+
+if (!(_curandero getVariable ["cancelRevive",false])
+    and _curado getVariable ["INCAPACITATED",false]
+    and (_curandero distance _curado <= 3)
+    and (_curandero == vehicle _curandero)) then
+{
+  _curandero setVariable ["success",true];
+  if ([_curandero] call A3A_fnc_isMedic) then {_curado setDamage 0.25} else {_curado setDamage 0.5};
+  _curandero removeItem "FirstAidKit";
+};
+
+_curandero setVariable ["timeToHeal",nil];
+_curandero setVariable ["curado",nil];
+
+_curandero setVariable ["ayudando",false];
+
+if (!_player) then
+{
+  {_curandero enableAI _x} forEach ["ANIM","AUTOTARGET","FSM","MOVE","TARGET"];
+}
+else
+{
+  _curandero removeAction _accion;
+  _curado setVariable ["ayudado",objNull,true];
+  _curandero setVariable ["ayudando",false];
+};
+
+if (_curandero getVariable ["cancelRevive",false]) exitWith
+{
+  if (_player) then
+  {
+    hint "Revive cancelled";
+    _curandero setVariable ["cancelRevive",nil];
+  };
+  _healed
+};
+
+if !(alive _curado) exitWith
+{
+	if (_player) then {hint format ["We lost %1",name _curado]};
+	if (_inPlayerGroup) then {_curandero groupChat format ["We lost %1",name _curado]};
+	_healed
+};
+
+if (!([_curandero] call A3A_fnc_canFight) 
+    or (_curandero != vehicle _curandero) 
+    or (_curandero distance _curado > 3)) exitWith 
+{
+  if (_player) then 
+  {
+    hint "Revive cancelled"
+  };
+  _healed
+};
+
+if (_curandero getVariable ["success",true]) then
+{
+	_lado = side (group _curado);
+	if ((_lado != side (group _curandero)) and ((_lado == malos) or (_lado == muyMalos))) then
+	{
+		_curado setVariable ["surrendered",true,true];
+		sleep 2;
+	};
+	_curado setVariable ["INCAPACITATED",false,true];
+	_healed = true;
+}
+else
+{
+	if (_player) then 
+  {
+    hint "Revive unsuccesful"
+  };
+	if (_inPlayerGroup) then 
+  {
+    _curandero groupChat "Revive failed"
+  };
+};
+
+_healed;
+
+/*
+//OLD CODE BELOW.
+
 _curandero addEventHandler ["AnimDone",
 	{
 	private _curandero = _this select 0;
@@ -164,4 +281,4 @@ else
 	if (_inPlayerGroup) then {_curandero groupChat "Revive failed"};
 	};
 
-_healed
+_healed*/
