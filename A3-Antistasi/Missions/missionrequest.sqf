@@ -172,7 +172,7 @@ if (_tipo == "CONVOY") then
 				_sitio = _sitios select _i;
 				_pos = getMarkerPos _sitio;
 				_base = [_sitio] call A3A_fnc_findBasesForConvoy;
-				if ((_pos distance _posbase < (distanciaMiss*2)) and (_base !="")) then
+				if ((_pos distance _posbase < (distanciaMiss)) and (_base !="")) then
 					{
 					if ((_sitio in ciudades) and (lados getVariable [_sitio,sideUnknown] == buenos)) then
 						{
