@@ -62,6 +62,7 @@ else
 _tipoConvoy = selectRandom _tiposConvoy;
 
 _tiempolim = if (_dificil) then {0} else {round random 10};// tiempo para que salga el convoy, deberíamos poner un round random 15
+//_tiempolim = 1;// tiempo para que salga el convoy, deberíamos poner un round random 15
 _fechalim = [date select 0, date select 1, date select 2, date select 3, (date select 4) + _tiempolim];
 _fechalimnum = dateToNumber _fechalim;
 
@@ -73,6 +74,13 @@ _taskState = "CREATED";
 _taskTitle = "";
 _taskIcon = "";
 _taskState1 = "CREATED";
+
+private _mrkConvoyOrigin = createMarkerLocal ["CONVOY_ORIGIN", _posbase]; 
+_mrkConvoyOrigin setMarkerShapeLocal "ICON"; 
+_mrkConvoyOrigin setMarkerTypeLocal "mil_start"; 
+_mrkConvoyOrigin setMarkerColorLocal "colorBLUFOR"; 
+_mrkConvoyOrigin setMarkerTextLocal "Convoy Origin"; 
+_mrkConvoyOrigin setMarkerAlphaLocal 1; 
 
 switch (_tipoConvoy) do
 	{
@@ -386,10 +394,12 @@ _wp0 setWaypointType "MOVE";
 
 _bonus = if (_dificil) then {2} else {1};
 
+private _atTargetDistance = 200;
+
 if (_tipoConvoy == "Municion") then
 	{
-	waitUntil {sleep 1; (dateToNumber date > _fechafinNum) or (_vehObj distance _posdestino < 300) or (not alive _vehObj) or ((driver _vehObj getVariable ["spawner",false]) and (side group (driver _vehObj) == buenos))};
-	if ((_vehObj distance _posdestino < 100) or (dateToNumber date >_fechafinNum)) then
+	waitUntil {sleep 1; (dateToNumber date > _fechafinNum) or (_vehObj distance _posdestino < _atTargetDistance) or (not alive _vehObj) or ((driver _vehObj getVariable ["spawner",false]) and (side group (driver _vehObj) == buenos))};
+	if ((_vehObj distance _posdestino < _atTargetDistance) or (dateToNumber date >_fechafinNum)) then
 		{
 		_taskState = "FAILED";
 		_taskState1 = "SUCCEEDED";
@@ -421,8 +431,8 @@ if (_tipoConvoy == "Municion") then
 
 if (_tipoConvoy == "Armor") then
 	{
-	waitUntil {sleep 1; (dateToNumber date > _fechafinNum) or (_vehObj distance _posdestino < 300) or (not alive _vehObj) or ((driver _vehObj getVariable ["spawner",false]) and (side group (driver _vehObj) == buenos))};
-	if ((_vehObj distance _posdestino < 100) or (dateToNumber date > _fechafinNum)) then
+	waitUntil {sleep 1; (dateToNumber date > _fechafinNum) or (_vehObj distance _posdestino < _atTargetDistance) or (not alive _vehObj) or ((driver _vehObj getVariable ["spawner",false]) and (side group (driver _vehObj) == buenos))};
+	if ((_vehObj distance _posdestino < _atTargetDistance) or (dateToNumber date > _fechafinNum)) then
 		{
 		_taskState = "FAILED";
 		_taskState1 = "SUCCEEDED";
@@ -452,8 +462,8 @@ if (_tipoConvoy == "Armor") then
 
 if (_tipoConvoy == "Prisoners") then
 	{
-	waitUntil {sleep 1; (dateToNumber date > _fechafinNum) or (_vehObj distance _posdestino < 300) or (not alive driver _vehObj) or ((driver _vehObj getVariable ["spawner",false]) and (side group (driver _vehObj == buenos))) or ({alive _x} count _POWs == 0)};
-	if ((_vehObj distance _posdestino < 100) or ({alive _x} count _POWs == 0) or (dateToNumber date > _fechafinNum)) then
+	waitUntil {sleep 1; (dateToNumber date > _fechafinNum) or (_vehObj distance _posdestino < _atTargetDistance) or (not alive driver _vehObj) or ((driver _vehObj getVariable ["spawner",false]) and (side group (driver _vehObj == buenos))) or ({alive _x} count _POWs == 0)};
+	if ((_vehObj distance _posdestino < _atTargetDistance) or ({alive _x} count _POWs == 0) or (dateToNumber date > _fechafinNum)) then
 		{
 		_taskState = "FAILED";
 		_taskState1 = "SUCCEEDED";
@@ -497,7 +507,7 @@ if (_tipoConvoy == "Prisoners") then
 
 if (_tipoConvoy == "Refuerzos") then
 	{
-	waitUntil {sleep 1; (dateToNumber date > _fechafinNum) or (_vehObj distance _posdestino < 300) or ({(!alive _x) or (captive _x)} count _refuerzos == count _refuerzos)};
+	waitUntil {sleep 1; (dateToNumber date > _fechafinNum) or (_vehObj distance _posdestino < _atTargetDistance) or ({(!alive _x) or (captive _x)} count _refuerzos == count _refuerzos)};
 	if ({(!alive _x) or (captive _x)} count _refuerzos == count _refuerzos) then
 		{
 		_taskState = "SUCCEEDED";
@@ -528,8 +538,8 @@ if (_tipoConvoy == "Refuerzos") then
 
 if (_tipoConvoy == "Money") then
 	{
-	waitUntil {sleep 1; (dateToNumber date > _fechafinNum) or (_vehObj distance _posdestino < 300) or (not alive _vehObj) or ((driver _vehObj getVariable ["spawner",false]) and (side group (driver _vehObj) == buenos))};
-	if ((dateToNumber date > _fechafinNum) or (_vehObj distance _posdestino < 100) or (not alive _vehObj)) then
+	waitUntil {sleep 1; (dateToNumber date > _fechafinNum) or (_vehObj distance _posdestino < _atTargetDistance) or (not alive _vehObj) or ((driver _vehObj getVariable ["spawner",false]) and (side group (driver _vehObj) == buenos))};
+	if ((dateToNumber date > _fechafinNum) or (_vehObj distance _posdestino < _atTargetDistance) or (not alive _vehObj)) then
 		{
 		_taskState = "FAILED";
 		if ((dateToNumber date > _fechafinNum) or (_vehObj distance _posdestino < 100)) then
@@ -579,7 +589,7 @@ if (_tipoConvoy == "Money") then
 
 if (_tipoConvoy == "Supplies") then
 	{
-	waitUntil {sleep 1; (dateToNumber date > _fechafinNum) or (_vehObj distance _posdestino < 300) or (not alive _vehObj) or ((driver _vehObj getVariable ["spawner",false]) and (side group (driver _vehObj) == buenos))};
+	waitUntil {sleep 1; (dateToNumber date > _fechafinNum) or (_vehObj distance _posdestino < _atTargetDistance) or (not alive _vehObj) or ((driver _vehObj getVariable ["spawner",false]) and (side group (driver _vehObj) == buenos))};
 	if (not alive _vehObj) then
 		{
 		[getPosASL _vehObj,_lado,"",false] spawn A3A_fnc_patrolCA;
@@ -591,7 +601,7 @@ if (_tipoConvoy == "Supplies") then
 		_killZones = _killZones + [_destino,_destino];
 		killZones setVariable [_base,_killZones,true];
 		};
-	if ((dateToNumber date > _fechafinNum) or (_vehObj distance _posdestino < 300) or ((driver _vehObj getVariable ["spawner",false]) and (side group (driver _vehObj) == buenos))) then
+	if ((dateToNumber date > _fechafinNum) or (_vehObj distance _posdestino < _atTargetDistance) or ((driver _vehObj getVariable ["spawner",false]) and (side group (driver _vehObj) == buenos))) then
 		{
 		if ((driver _vehObj getVariable ["spawner",false]) and (side group (driver _vehObj) == buenos)) then
 			{
@@ -641,8 +651,10 @@ if (_tipoConvoy == "Prisoners") then
 	deleteVehicle _x;
 	} forEach _POWs;
 	};
+  
+deleteMarkerLocal _mrkConvoyOrigin;
 
-_nul = [300,"CONVOY"] spawn A3A_fnc_borrarTask;
+_nul = [10,"CONVOY"] spawn A3A_fnc_borrarTask;
 _nul = [0,"CONVOY1"] spawn A3A_fnc_borrarTask;
 {
 if (!([distanciaSPWN,1,_x,buenos] call A3A_fnc_distanceUnits)) then {deleteVehicle _x}
