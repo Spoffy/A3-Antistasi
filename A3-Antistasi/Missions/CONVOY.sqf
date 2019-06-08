@@ -654,7 +654,7 @@ if (_tipoConvoy == "Prisoners") then
   
 deleteMarkerLocal _mrkConvoyOrigin;
 
-_nul = [10,"CONVOY"] spawn A3A_fnc_borrarTask;
+_nul = [300,"CONVOY"] spawn A3A_fnc_borrarTask;
 _nul = [0,"CONVOY1"] spawn A3A_fnc_borrarTask;
 {
 if (!([distanciaSPWN,1,_x,buenos] call A3A_fnc_distanceUnits)) then {deleteVehicle _x}
