@@ -61,7 +61,7 @@ else
 			if ((random 20 < skillFIA) and (count unlockedAA > 0)) then
 				{
 				_unit addbackpack (unlockedBackpacks select 0);
-				[_unit, selectRandom unlockedAA, 2, 0] call BIS_fnc_addWeapon;
+				[_unit, selectRandom unlockedAA, 0, 0] call BIS_fnc_addWeapon;
 				//removeBackpack _unit;
 				};
 			};
@@ -140,7 +140,22 @@ else
 		};
 	};
 
-
+// Ensure any launcher has ammo in the tube, and in the backpack if they have one.
+if !(secondaryWeapon _unit == "") then 
+	{
+	_magazines = getArray (configFile / "CfgWeapons" / (secondaryWeapon _unit) / "magazines");
+	if !(_magazines isEqualTo []) then 
+		{
+		// Put ammo in the tube
+		_unit addSecondaryWeaponItem (_magazines select 0);
+		if !(isNull unitBackpack _unit) then 
+			{
+			// Force add ammo to backpack
+			(unitBackpack _unit) addItemCargoGlobal [_magazines select 0, 3];
+			};
+		};
+	};
+  
 _unit selectWeapon (primaryWeapon _unit);
 
 if (!haveRadio) then {_unit unlinkItem "ItemRadio"};
