@@ -47,12 +47,12 @@ _posicionTel = posicionTel;
 if (count _posicionTel > 0) then
 	{
 	_base = [_marcadores, _posicionTel] call BIS_Fnc_nearestPosition;
-	if (_checkForPlayer and ((_base != "SYND_HQ") and !(_base in aeropuertos))) exitWith {hint "Player groups are only allowed to Fast Travel to HQ or Airbases"};
+	if (_checkForPlayer and ((_base != "SYND_HQ") and !(_base in aeropuertos) and !(_base in puestos))) exitWith {hint "Player groups are only allowed to Fast Travel to HQ, Airbases and Outposts"};
 	if ((lados getVariable [_base,sideUnknown] == malos) or (lados getVariable [_base,sideUnknown] == muyMalos)) exitWith {hint "You cannot Fast Travel to an enemy controlled zone"; openMap [false,false]};
 
 	//if (_base in puestosFIA) exitWith {hint "You cannot Fast Travel to roadblocks and watchposts"; openMap [false,false]};
 
-	if ([getMarkerPos _base,500] call A3A_fnc_enemyNearCheck) exitWith {Hint "You cannot Fast Travel to an area under attack or with enemies in the surrounding"; openMap [false,false]};
+	if ([getMarkerPos _base, 350] call A3A_fnc_enemyNearCheck) exitWith {Hint "You cannot Fast Travel to an area under attack or with enemies in the surrounding"; openMap [false,false]};
 
 	if (_posicionTel distance getMarkerPos _base < 50) then
 		{
@@ -79,7 +79,7 @@ if (count _posicionTel > 0) then
 			{if (vehicle _x != _x) then {_vehicles pushBackUnique (vehicle _x)}} forEach units _grupo;
 			{if ((vehicle _x) in _vehicles) exitWith {_checkForPlayer = true}} forEach playableUnits;
 			};
-		if (_checkForPlayer and ((_base != "SYND_HQ") and !(_base in aeropuertos))) exitWith {hint format ["%1 Fast Travel has been cancelled because some player has boarded their vehicle and the destination is not HQ or an Airbase",groupID _grupo]};
+		if (_checkForPlayer and ((_base != "SYND_HQ") and !(_base in aeropuertos) and !(_base in puestos))) exitWith {hint format ["%1 Fast Travel has been cancelled because some player has boarded their vehicle and the destination is not HQ, an Airbase or an Outpost",groupID _grupo]};
 		{
 		_unit = _x;
 		if ((!isPlayer _unit) or (_unit == player)) then
