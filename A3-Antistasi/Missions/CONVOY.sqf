@@ -61,7 +61,7 @@ else
 
 _tipoConvoy = selectRandom _tiposConvoy;
 
-_tiempolim = if (_dificil) then {0} else {round random 10};// tiempo para que salga el convoy, deberíamos poner un round random 15
+_tiempolim = if (_dificil) then {3} else {6 min (round random 10)};// tiempo para que salga el convoy, deberíamos poner un round random 15
 //_tiempolim = 1;// tiempo para que salga el convoy, deberíamos poner un round random 15
 _fechalim = [date select 0, date select 1, date select 2, date select 3, (date select 4) + _tiempolim];
 _fechalimnum = dateToNumber _fechalim;
