@@ -1,5 +1,5 @@
 private _cities = ciudades - destroyedCities;
-private _outposts = puertos;
+private _outposts = puestos;
 private _banks = bancos;
 
 private _possibleCities = _cities select {[_x] call A3A_fnc_isValidLocationForLogisticsMission};
